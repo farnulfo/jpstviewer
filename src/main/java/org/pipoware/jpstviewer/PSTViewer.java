@@ -89,7 +89,7 @@ public class PSTViewer extends Application {
           bbtTree.setRoot(NDBTreeItem.createNode(new NDBItemPage(pageBBT, pstFile)));
 
         } catch (IOException ex) {
-          Logger.getLogger(PSTViewer2.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
         }
       }
     });
