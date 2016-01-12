@@ -5,8 +5,10 @@
  */
 package org.pipoware.jpstviewer;
 
+import com.google.common.io.BaseEncoding;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -39,10 +41,13 @@ class NDBItemBlock extends NDBItem {
     System.out.println("Block:" + block);
     System.out.println("Data: " + block.data);
     Stage stage = new Stage();
-    stage.setTitle("Display Block");
+    stage.setTitle("Block Inspector");
     VBox root = new VBox();
-    SplitPane splitPane = new SplitPane();
-    VBox.setVgrow(splitPane, Priority.ALWAYS);
+    TextArea blockData = new TextArea();
+    blockData.setWrapText(true);
+    blockData.setText("[" + BaseEncoding.base16().withSeparator(",", 2).encode(block.data) + "]");
+    VBox.setVgrow(blockData, Priority.ALWAYS);
+    root.getChildren().add(blockData);
     stage.setScene(new Scene(root, 300, 250));
     stage.show();
   }
