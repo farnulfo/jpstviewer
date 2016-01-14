@@ -121,7 +121,7 @@ public class PSTViewer extends Application {
     splitPane.getItems().addAll(vboxNodes, vboxBlocks);
     root.getChildren().add(splitPane);
 
-    primaryStage.setScene(new Scene(root, 300, 250));
+    primaryStage.setScene(new Scene(root, 700, 500));
     primaryStage.show();
   }
 
