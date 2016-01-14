@@ -88,8 +88,12 @@ public class PSTViewer extends Application {
           primaryStage.setTitle(PST_WINDOW_TITLE + " - " + file.getCanonicalPath());
           Page pageNBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefNBT);
           Page pageBBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefBBT);
-          nbtTree.setRoot(NDBTreeItem.createNode(new NDBItemPage(pageNBT, pstFile)));
-          bbtTree.setRoot(NDBTreeItem.createNode(new NDBItemPage(pageBBT, pstFile)));
+          final TreeItem<NDBItem> nbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageNBT, pstFile));
+          nbtRootItem.setExpanded(true);
+          nbtTree.setRoot(nbtRootItem);
+          final TreeItem<NDBItem> bbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageBBT, pstFile));
+          bbtRootItem.setExpanded(true);
+          bbtTree.setRoot(bbtRootItem);
 
         } catch (IOException ex) {
           Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
