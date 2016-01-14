@@ -7,10 +7,10 @@ package org.pipoware.jpstviewer;
 
 import com.google.common.io.BaseEncoding;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.pipoware.pst.exp.Block;
 
@@ -38,17 +38,17 @@ class NDBItemBlock extends NDBItem {
 
   @Override
   public void display() {
-    System.out.println("Block:" + block);
-    System.out.println("Data: " + block.data);
     Stage stage = new Stage();
-    stage.setTitle("Block Inspector");
+    stage.setTitle("Block Inspector: " + block.getBREF());
     VBox root = new VBox();
     TextArea blockData = new TextArea();
+    blockData.setFont(Font.font(java.awt.Font.MONOSPACED));
     blockData.setWrapText(true);
-    blockData.setText("[" + BaseEncoding.base16().withSeparator(",", 2).encode(block.data) + "]");
+    blockData.setEditable(false);
+    blockData.setText(getStringData(block.getBREF().getIb(), block.data, 12));
     VBox.setVgrow(blockData, Priority.ALWAYS);
     root.getChildren().add(blockData);
-    stage.setScene(new Scene(root, 300, 250));
+    stage.setScene(new Scene(root, 380, 250));
     stage.show();
   }
 
@@ -57,4 +57,15 @@ class NDBItemBlock extends NDBItem {
     return block.toString();
   }
 
+  private String getStringData(long startAddress, byte[] bytes, int nbBytesPerLine) {
+    StringBuilder sb = new StringBuilder();
+    for (int offset = 0; offset < bytes.length; offset += nbBytesPerLine, startAddress += nbBytesPerLine) {
+      sb.append(Long.toHexString(startAddress).toUpperCase());
+      sb.append(": ");
+      int len = (offset + nbBytesPerLine > bytes.length) ? bytes.length - offset : nbBytesPerLine;
+      sb.append(BaseEncoding.base16().withSeparator(" ", 2).encode(bytes, offset, len));
+      sb.append(System.lineSeparator());
+    }
+    return sb.toString();
+  }
 }
