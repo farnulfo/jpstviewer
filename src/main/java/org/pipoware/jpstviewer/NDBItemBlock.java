@@ -5,6 +5,7 @@
  */
 package org.pipoware.jpstviewer;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -38,6 +39,7 @@ class NDBItemBlock extends NDBItem {
 
   @Override
   public void display() {
+    Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK);
     Stage stage = new Stage();
     stage.setTitle("Block Inspector: " + block.getBREF());
     VBox root = new VBox();
