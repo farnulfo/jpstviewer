@@ -34,13 +34,15 @@ import org.pipoware.pst.exp.pages.BBTENTRY;
  */
 public class PSTViewer extends Application {
 
+  private static final String PST_WINDOW_TITLE = "PST Structure Viewer";
+
   public static void main(String[] args) {
     launch(args);
   }
 
   @Override
   public void start(final Stage primaryStage) throws IOException {
-    primaryStage.setTitle("PST Structure Viewer");
+    primaryStage.setTitle(PST_WINDOW_TITLE);
 
    TreeItem<NDBItem> rootNBTItem = new TreeItem<>();
     final TreeView<NDBItem> nbtTree = new TreeView<>(rootNBTItem);
@@ -83,6 +85,7 @@ public class PSTViewer extends Application {
         PSTFile pstFile;
         try {
           pstFile = new PSTFile(path);
+          primaryStage.setTitle(PST_WINDOW_TITLE + " - " + file.getCanonicalPath());
           Page pageNBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefNBT);
           Page pageBBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefBBT);
           nbtTree.setRoot(NDBTreeItem.createNode(new NDBItemPage(pageNBT, pstFile)));
@@ -117,6 +120,7 @@ public class PSTViewer extends Application {
     primaryStage.setScene(new Scene(root, 300, 250));
     primaryStage.show();
   }
+
   private void addNBTPage(TreeItem<String> rootItem, PSTFile pstFile, Page page) throws IOException {
     TreeItem<String> p = new TreeItem<>(page.toString());
     if (page.getDepthLevel() > 0) {
