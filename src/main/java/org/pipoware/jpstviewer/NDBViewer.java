@@ -44,7 +44,7 @@ public class NDBViewer extends Application {
   public void start(final Stage primaryStage) throws IOException {
     primaryStage.setTitle(PST_WINDOW_TITLE);
 
-   TreeItem<NDBItem> rootNBTItem = new TreeItem<>();
+    TreeItem<NDBItem> rootNBTItem = new TreeItem<>();
     final TreeView<NDBItem> nbtTree = new TreeView<>(rootNBTItem);
     nbtTree.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
@@ -80,23 +80,24 @@ public class NDBViewer extends Application {
         fileChooser.setTitle("Open a Outlook PST file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PST file", "*.pst"));
         File file = fileChooser.showOpenDialog(primaryStage);
-        System.out.println("File:" + file);
-        Path path = file.toPath();
-        PSTFile pstFile;
-        try {
-          pstFile = new PSTFile(path);
-          primaryStage.setTitle(PST_WINDOW_TITLE + " - " + file.getCanonicalPath());
-          Page pageNBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefNBT);
-          Page pageBBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefBBT);
-          final TreeItem<NDBItem> nbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageNBT, pstFile));
-          nbtRootItem.setExpanded(true);
-          nbtTree.setRoot(nbtRootItem);
-          final TreeItem<NDBItem> bbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageBBT, pstFile));
-          bbtRootItem.setExpanded(true);
-          bbtTree.setRoot(bbtRootItem);
+        if (file != null) {
+          Path path = file.toPath();
+          PSTFile pstFile;
+          try {
+            pstFile = new PSTFile(path);
+            primaryStage.setTitle(PST_WINDOW_TITLE + " - " + file.getCanonicalPath());
+            Page pageNBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefNBT);
+            Page pageBBT = pstFile.ndb.getPage(pstFile.getHeader().getRoot().bRefBBT);
+            final TreeItem<NDBItem> nbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageNBT, pstFile));
+            nbtRootItem.setExpanded(true);
+            nbtTree.setRoot(nbtRootItem);
+            final TreeItem<NDBItem> bbtRootItem = NDBTreeItem.createNode(new NDBItemPage(pageBBT, pstFile));
+            bbtRootItem.setExpanded(true);
+            bbtTree.setRoot(bbtRootItem);
 
-        } catch (IOException ex) {
-          Logger.getLogger(NDBViewer.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (IOException ex) {
+            Logger.getLogger(NDBViewer.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
       }
     });
