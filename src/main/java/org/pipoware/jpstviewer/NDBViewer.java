@@ -32,9 +32,9 @@ import org.pipoware.pst.exp.pages.BBTENTRY;
  *
  * @author Franck Arnulfo
  */
-public class PSTViewer extends Application {
+public class NDBViewer extends Application {
 
-  private static final String PST_WINDOW_TITLE = "PST Structure Viewer";
+  private static final String PST_WINDOW_TITLE = "NDB Structure Viewer";
 
   public static void main(String[] args) {
     launch(args);
@@ -96,7 +96,7 @@ public class PSTViewer extends Application {
           bbtTree.setRoot(bbtRootItem);
 
         } catch (IOException ex) {
-          Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(NDBViewer.class.getName()).log(Level.SEVERE, null, ex);
         }
       }
     });
