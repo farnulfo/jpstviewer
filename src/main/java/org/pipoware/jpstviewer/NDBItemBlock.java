@@ -8,6 +8,7 @@ package org.pipoware.jpstviewer;
 import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -39,7 +40,15 @@ class NDBItemBlock extends NDBItem {
 
   @Override
   public void display() {
-    Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK);
+    Preconditions.checkArgument(block.blockType == Block.BlockType.DATA_BLOCK || block.blockType == Block.BlockType.XBLOCK);
+    if (block.blockType == Block.BlockType.DATA_BLOCK) {
+      displayDataBlock();
+    } else if (block.blockType == Block.BlockType.XBLOCK) {
+      displayXBlock();
+    }
+  }
+
+  private void displayDataBlock() {
     Stage stage = new Stage();
     stage.setTitle("Block Inspector: " + block.getBREF());
     VBox root = new VBox();
@@ -50,6 +59,20 @@ class NDBItemBlock extends NDBItem {
     blockData.setText(getStringData(block.getBREF().getIb(), block.data, 12));
     VBox.setVgrow(blockData, Priority.ALWAYS);
     root.getChildren().add(blockData);
+    stage.setScene(new Scene(root, 380, 250));
+    stage.show();
+  }
+
+  private void displayXBlock() {
+    Stage stage = new Stage();
+    stage.setTitle("XBlock Inspector: " + block.getBREF());
+    VBox root = new VBox();
+    ListView<String> bids = new ListView<>();
+    for (int i = 0; i < block.rgbid.length; i++) {
+      bids.getItems().add("rgbid[" + i + "] = 0x" +Long.toHexString(block.rgbid[i]));
+    }
+    VBox.setVgrow(bids, Priority.ALWAYS);
+    root.getChildren().add(bids);
     stage.setScene(new Scene(root, 380, 250));
     stage.show();
   }
