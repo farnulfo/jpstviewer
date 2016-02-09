@@ -66,7 +66,7 @@ public class PSTViewer extends Application {
         messageList.getItems().clear();
         try {
           for (Message message : folder.getValue().getMessages()) {
-            messageList.getItems().add(message.toString());
+            messageList.getItems().add(message.getSubject());
           }
         } catch (IOException ex) {
           Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
