@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import org.pipoware.pst.exp.Folder;
 import org.pipoware.pst.exp.Message;
 import org.pipoware.pst.exp.PSTFile;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -120,7 +121,7 @@ public class PSTViewer extends Application {
 
       private void processFolder(TreeItem<Folder> treeItemFolder) throws IOException {
         Folder folder = treeItemFolder.getValue();
-        if (folder.hasSubFolers()) {
+        if (folder.hasSubFolders()) {
           for (Folder f : folder.getFolders()) {
             TreeItem<Folder> tif = new TreeItem<>(f);
             treeItemFolder.getChildren().add(tif);
