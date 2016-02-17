@@ -103,7 +103,10 @@ class NDBItemNBTENTRY extends NDBItem {
       String s;
       if (pcItem.getPropertyDataType() == PropertyDataType.PtypString) {
         s = pcItem.getString();
-      } else if (pcItem.dataValue == null) {
+      } else if (pcItem.getPropertyDataType() == PropertyDataType.PtypBoolean) {
+        s = pcItem.getBoolean() ? "true" : "false";
+      }
+      else if (pcItem.dataValue == null) {
         s = "";
       } else {
         final int MAX_BYTES = 128;
