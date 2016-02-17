@@ -52,7 +52,8 @@ class NDBItemNBTENTRY extends NDBItem {
   
   @Override
   public void display() {
-    if (nbtentry.nid.nidType == NID.NID_TYPE_NORMAL_FOLDER) {
+    if (nbtentry.nid.nidType == NID.NID_TYPE_NORMAL_FOLDER ||
+      nbtentry.nid.nidType == NID.NID_TYPE_NORMAL_MESSAGE) {
       try {
         PC pc = pstFile.ndb.getPCFromNBTENTRY(nbtentry);
         displayPC(pc);
