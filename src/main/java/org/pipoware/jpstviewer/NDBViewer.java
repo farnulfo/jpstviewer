@@ -52,6 +52,7 @@ public class NDBViewer extends Application {
         if (mouseEvent.getClickCount() == 2) {
           TreeItem<NDBItem> item = nbtTree.getSelectionModel().getSelectedItem();
           System.out.println("Selected Text : " + item.getValue());
+          item.getValue().display();
         }
       }
     });
