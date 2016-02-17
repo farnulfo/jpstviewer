@@ -85,7 +85,7 @@ class NDBItemNBTENTRY extends NDBItem {
 
     propIdCol.setCellValueFactory(param -> {
       final PCItem pcItem = param.getValue();
-      return new SimpleStringProperty(Integer.toHexString(pcItem.propertyIdentifier));
+      return new SimpleStringProperty(String.format("0x%04X", pcItem.propertyIdentifier));
     });
 
     propIdNameCol.setCellValueFactory((TableColumn.CellDataFeatures<PCItem, String> param) -> {
