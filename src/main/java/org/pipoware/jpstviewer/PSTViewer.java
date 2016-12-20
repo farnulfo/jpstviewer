@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -30,6 +28,11 @@ import org.pipoware.pst.exp.Folder;
 import org.pipoware.pst.exp.Message;
 import org.pipoware.pst.exp.PSTFile;
 import static javafx.application.Application.launch;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.SplitPane;
+import javafx.util.Callback;
 
 /**
  *
@@ -55,25 +58,67 @@ public class PSTViewer extends Application {
 
   private Parent buildGUI(Stage stage) {
 
-    final ListView<String> messageList = new ListView<>();
+    //List<Message> messageList = new ArrayList<>();
+    final ListView<Message> messageListView = new ListView<>();
+    messageListView.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>() {
+
+      @Override
+      public ListCell<Message> call(ListView<Message> p) {
+
+        ListCell<Message> cell = new ListCell<Message>() {
+
+          @Override
+          protected void updateItem(Message m, boolean empty) {
+            super.updateItem(m, empty);
+
+            if (empty || m == null) {
+              setText(null);
+              setGraphic(null);
+            } else {
+              setText(m.getSubject());
+            }
+          }
+
+        };
+
+        return cell;
+      }
+    });
+    messageListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Message>() {
+      @Override
+      public void changed(ObservableValue<? extends Message> observable, Message oldValue, Message newValue) {
+       if (newValue != null)  {
+         System.out.println(newValue.toString());
+         //newValue.toStringMessageObjectPC();
+       }
+      }
+    });
+
+    ObservableList<Message> observableMessageList = FXCollections.observableArrayList();
+    messageListView.setItems(observableMessageList);
 
     SplitPane mainSplitPane = new SplitPane();
     VBox.setVgrow(mainSplitPane, Priority.ALWAYS);
     TreeView<Folder> folderTreeView = new TreeView<>();
-    folderTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener(){
+    folderTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-        TreeItem<Folder> folder = (TreeItem<Folder>) newValue;
-        messageList.getItems().clear();
-        try {
-          for (Message message : folder.getValue().getMessages()) {
-            messageList.getItems().add(message.getSubject());
+        if (newValue == null) {
+          observableMessageList.clear();
+          return;
+        } else {
+          TreeItem<Folder> folder = (TreeItem<Folder>) newValue;
+          observableMessageList.clear();
+          try {
+            for (Message message : folder.getValue().getMessages()) {
+              observableMessageList.add(message);
+            }
+          } catch (IOException ex) {
+            Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
           }
-        } catch (IOException ex) {
-          Logger.getLogger(PSTViewer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
       }
+
     });
 
     SplitPane rightSplitPane = new SplitPane();
@@ -81,7 +126,7 @@ public class PSTViewer extends Application {
     VBox.setVgrow(rightSplitPane, Priority.ALWAYS);
 
     TabPane bodyTabs = new TabPane();
-    rightSplitPane.getItems().addAll(messageList, bodyTabs);
+    rightSplitPane.getItems().addAll(messageListView, bodyTabs);
 
     mainSplitPane.getItems().addAll(folderTreeView, rightSplitPane);
 
