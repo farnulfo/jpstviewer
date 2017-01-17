@@ -24,6 +24,8 @@ import org.pipoware.pst.exp.PCItem;
 import org.pipoware.pst.exp.PSTFile;
 import org.pipoware.pst.exp.PropertyDataType;
 import org.pipoware.pst.exp.PropertyIdentifier;
+import org.pipoware.pst.exp.PropertyTag;
+import static org.pipoware.pst.exp.PropertyTag.getPropertyTagFromIdentifier;
 import org.pipoware.pst.exp.pages.NBTENTRY;
 
 /**
@@ -90,7 +92,8 @@ class NDBItemNBTENTRY extends NDBItem {
 
     propIdNameCol.setCellValueFactory((TableColumn.CellDataFeatures<PCItem, String> param) -> {
       final PCItem pcItem = param.getValue();
-      return new SimpleStringProperty(PropertyIdentifier.MAP.get(pcItem.propertyIdentifier));
+      PropertyTag propertyTag = getPropertyTagFromIdentifier(pcItem.propertyIdentifier, pcItem.getPropertyDataType());
+      return new SimpleStringProperty(propertyTag == null ? "" : propertyTag.toString());
     });
 
     propType.setCellValueFactory((TableColumn.CellDataFeatures<PCItem, String> param) -> {
