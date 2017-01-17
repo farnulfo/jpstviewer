@@ -81,7 +81,7 @@ class NDBItemNBTENTRY extends NDBItem {
     TableColumn<PCItem, String>  propData = new TableColumn("Data");
     TableColumn<PCItem, String>  propType = new TableColumn("Type");
     
-    table.getColumns().addAll(propIdCol, propIdNameCol, propType, propData);
+    table.getColumns().addAll(propIdCol, propType, propIdNameCol, propData);
     
     ObservableList<PCItem> data = FXCollections.observableList(pc.items);
 
